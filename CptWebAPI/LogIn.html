@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="padding-top:20px">
+    <div class="col-md-5 col-lg-offset-0 ">
+        <div class="well">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="success">
+                        <td colspan="2">
+                            User Log In
+                            <a class="btn btn-link pull-right" href="Registration.html"> Register</a>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> User Name/Email</td>
+                        <td>
+                            <input type="text" id="txtUsername" placeholder="Username" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> Password</td>
+                        <td>
+                            <input type="password" id="txtPassword" placeholder="Password"  />
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td colspan="2">
+                            <input id="btnLogIn" class="btn btn-success" type="button" value="LogIn" />
+                            <a class="btn btn-link pull-right" href="UpdateUser.html"> Change Password</a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="divError" class="alert alert-danger collapse">
+                <a id="CloseLnk" class="close" href="#">&times;</a>
+                <div id="divErrText"></div>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#CloseLnk').click(function () {
+                $('divError').hide('fade');
+            });
+            $('#btnLogIn').click(function () {
+
+                $.ajax({
+                    url: '/token',
+                    method: 'POST',
+                    contentType : 'application/json',
+                    data: {
+                        username: $('#txtUsername').val(),
+                        password: $('#txtPassword').val(),
+                        grant_type : 'password'
+                    },
+                    success: function (response) {
+                        //$('#divErrText').text(JSON.stringify(response));
+                        //$('#divError').show('fade');
+
+                        sessionStorage.setItem('accessToken', response.access_token);
+                        localStorage.setItem("userName", response.username);
+                        window.location.href ="HomePage.html"
+
+                    },
+                    error: function (jqXHR) {
+                        $('#divErrText').text(jqXHR.responseText);
+                        $('#divError').show('fade');
+                    //error: function (response) {
+
+
+                    //    $("#divErrText").html('<div class ="failed">' + response + '</div>');
+
+                    //        $('#divError').show('fade');
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>

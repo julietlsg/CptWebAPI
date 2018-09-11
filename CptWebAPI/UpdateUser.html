@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="padding-top:20px">
+    <div class="col-md-5 col-lg-offset-0 ">
+        <div class="well">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="success">
+                        <td colspan="2">
+                            Change Password
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> Email</td>
+                        <td>
+                            <input type="text" id="txtEmail" placeholder="Email" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Old Password</td>
+                        <td>
+                            <input type="password" id="txtOldPassword" placeholder="OldPassword" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td> New Password</td>
+                        <td>
+                            <input type="password" id="txtPassword" placeholder="Password" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> Confirm Password</td>
+                        <td>
+                            <input type="password" id="txtConfirmPassword" placeholder="ConfirmPassword" />
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td colspan="2">
+                            <input id="btnUpdate" class="btn btn-success" type="button" value="Reset Password" />
+                            <a class="btn btn-link pull-right" href="LogIn.html"> LogIn</a>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="modal fade" tabindex="-1" id="successModal" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                        <h4>Success</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h2> Account Updated Successfully</h2>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div id="divError" class="alert alert-danger collapse">
+                <a id="CloseLnk" class="close" href="#">&times;</a>
+                <div id="divErrText"></div>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#CloseLnk').click(function () {
+                $('divError').hide('fade');
+            });
+            $('#btnUpdate').click(function () {
+
+                $.ajax({
+                    url: '/api/account/ChangePassword',
+                    method: 'POST',
+                    data: {
+                        email: $('#txtEmail').val(),
+                        oldPassword: $('#txtOldPassword').val(),
+                        password: $('#txtPassword').val(),
+                        confirmPassword: $('#txtConfirmPassword').val(),
+                    },
+                    success: function () {
+                        $('#successModal').modal('show')
+
+
+                    },
+                    error: function (jqXHR) {
+                        $('#divErrText').text(jqXHR.responseText);
+                        $('#divError').show('fade');
+                    }
+                });
+            });
+        });
+
+    </script>
+
+</body>
+</html>
